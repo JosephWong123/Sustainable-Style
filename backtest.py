@@ -1,5 +1,6 @@
 from google.cloud import vision
 
+
 def create_product_set(
         project_id, location, product_set_id, product_set_display_name):
     """Create a product set.
