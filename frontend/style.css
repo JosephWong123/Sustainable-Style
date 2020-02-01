@@ -1,0 +1,14 @@
+body{
+	background-color:#f4f4f4f4;
+}
+.topBackground{
+	background-color: AliceBlue;
+
+	border-right:5px gray solid;
+	border-left:5px gray solid;
+	border-top:5px gray solid;
+	border-bottom:5px gray solid;
+
+	padding:20px;
+	text-align:center;
+}
