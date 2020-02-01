@@ -58,6 +58,7 @@ def import_product_sets(project_id, location, gcs_uri):
     result = response.result()
     print('Processing done.')
 
+    print(result.statuses)
     for i, status in enumerate(result.statuses):
         print('Status of processing line {} of the csv: {}'.format(
             i, status))
@@ -69,6 +70,161 @@ def import_product_sets(project_id, location, gcs_uri):
         else:
             print('Status code not OK: {}'.format(status.message))
 
+def delete_product_set(project_id, location, product_set_id):
+    """Delete a product set.
+    Args:
+        project_id: Id of the project.
+        location: A compute region name.
+        product_set_id: Id of the product set.
+    """
+    client = vision.ProductSearchClient()
+
+    # Get the full path of the product set.
+    product_set_path = client.product_set_path(
+        project=project_id, location=location,
+        product_set=product_set_id)
+
+    # Delete the product set.
+    client.delete_product_set(name=product_set_path)
+    print('Product set deleted.')
+
+def get_similar_products_file(
+        project_id, location, product_set_id, product_category,
+        file_path, filter):
+    """Search similar products to image.
+    Args:
+        project_id: Id of the project.
+        location: A compute region name.
+        product_set_id: Id of the product set.
+        product_category: Category of the product.
+        file_path: Local file path of the image to be searched.
+        filter: Condition to be applied on the labels.
+        Example for filter: (color = red OR color = blue) AND style = kids
+        It will search on all products with the following labels:
+        color:red AND style:kids
+        color:blue AND style:kids
+    """
+    # product_search_client is needed only for its helper methods.
+    product_search_client = vision.ProductSearchClient()
+    image_annotator_client = vision.ImageAnnotatorClient()
+
+    # Read the image as a stream of bytes.
+    with open(file_path, 'rb') as image_file:
+        content = image_file.read()
+
+    # Create annotate image request along with product search feature.
+    image = vision.types.Image(content=content)
+
+    # product search specific parameters
+    product_set_path = product_search_client.product_set_path(
+        project=project_id, location=location,
+        product_set=product_set_id)
+    product_search_params = vision.types.ProductSearchParams(
+        product_set=product_set_path,
+        product_categories=[product_category],
+        filter=filter)
+    image_context = vision.types.ImageContext(
+        product_search_params=product_search_params)
+
+    # Search products similar to the image.
+    response = image_annotator_client.product_search(
+        image, image_context=image_context)
+
+    index_time = response.product_search_results.index_time
+    print('Product set index time:')
+    print('  seconds: {}'.format(index_time.seconds))
+    print('  nanos: {}\n'.format(index_time.nanos))
+
+    results = response.product_search_results.results
+
+    print('Search results:')
+    for result in results:
+        product = result.product
+
+        print('Score(Confidence): {}'.format(result.score))
+        print('Image name: {}'.format(result.image))
+
+        print('Product name: {}'.format(product.name))
+        print('Product display name: {}'.format(
+            product.display_name))
+        print('Product description: {}\n'.format(product.description))
+        print('Product labels: {}\n'.format(product.product_labels))
+
+def list_product_sets(project_id, location):
+    """List all product sets.
+    Args:
+        project_id: Id of the project.
+        location: A compute region name.
+    """
+    client = vision.ProductSearchClient()
+
+    # A resource that represents Google Cloud Platform location.
+    location_path = client.location_path(
+        project=project_id, location=location)
+
+    # List all the product sets available in the region.
+    product_sets = client.list_product_sets(parent=location_path)
+
+    # Display the product set information.
+    for product_set in product_sets:
+        print('Product set name: {}'.format(product_set.name))
+        print('Product set id: {}'.format(product_set.name.split('/')[-1]))
+        print('Product set display name: {}'.format(product_set.display_name))
+        print('Product set index time:')
+        print('  seconds: {}'.format(product_set.index_time.seconds))
+        print('  nanos: {}\n'.format(product_set.index_time.nanos))
+
+# [END vision_product_search_list_product_sets]
+
+
+# [START vision_product_search_get_product_set]
+def get_product_set(project_id, location, product_set_id):
+    """Get info about the product set.
+    Args:
+        project_id: Id of the project.
+        location: A compute region name.
+        product_set_id: Id of the product set.
+    """
+    client = vision.ProductSearchClient()
+
+    # Get the full path of the product set.
+    product_set_path = client.product_set_path(
+        project=project_id, location=location,
+        product_set=product_set_id)
+
+    # Get complete detail of the product set.
+    product_set = client.get_product_set(name=product_set_path)
+
+    # Display the product set information.
+    print('Product set name: {}'.format(product_set.name))
+    print('Product set id: {}'.format(product_set.name.split('/')[-1]))
+    print('Product set display name: {}'.format(product_set.display_name))
+    print('Product set index time:')
+    print('  seconds: {}'.format(product_set.index_time.seconds))
+    print('  nanos: {}'.format(product_set.index_time.nanos))
+
+def delete_all_sets(project_id, location):
+    client = vision.ProductSearchClient()
+
+    client = vision.ProductSearchClient()
+
+    # A resource that represents Google Cloud Platform location.
+    location_path = client.location_path(
+        project=project_id, location=location)
+
+    # List all the product sets available in the region.
+    product_sets = client.list_product_sets(parent=location_path)
+
+    for product_set in product_sets:
+        delete_product_set(project_id, location, product_set.name.split('/')[-1])
+
+
 if __name__ == '__main__':
-    create_product_set("hack-sc-2020", "us-west1", "second_test_set", "test")
-    import_product_sets("hack-sc-2020", "us-west1", "gs://test-fashion-data/ProductDes.csv")
+
+    # delete_product_set("hack-sc-2020", "us-west1", "product-list")
+    # create_product_set("hack-sc-2020", "us-west1", "product-list", "Products")
+    # import_product_sets("hack-sc-2020", "us-west1", "gs://test-fashion-data/ProductDesFinal.csv")
+    # list_product_sets("hack-sc-2020", "us-west1")
+    # get_product_set("hack-sc-2020", "us-west1", "product-list")
+    get_similar_products_file('hack-sc-2020', 'us-west1', "product-list", "apparel-v2", "download2.png", "")
+    # delete_all_sets("hack-sc-2020", "us-west1")
