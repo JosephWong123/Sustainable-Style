@@ -1,14 +1,51 @@
-body{
-	background-color:#f4f4f4f4;
+*{
+	margin:0;
 }
-.topBackground{
-	background-color: AliceBlue;
+.top{
+	background-color:white;
 
-	border-right:5px gray solid;
-	border-left:5px gray solid;
-	border-top:5px gray solid;
-	border-bottom:5px gray solid;
-
-	padding:20px;
-	text-align:center;
+	padding:40px;
+	text-align:left;
 }
+
+h1{
+	color:black;
+	font-style:italic;
+	font-family:Courier;
+	font-size:300%;
+}
+
+h2{
+	color:black;
+	font-size:400%;
+	text-align:right;
+	position:relative;
+	padding:40px;
+}
+
+h3{
+	color:LightSlateGray;
+	font-family:Roboto;
+	font-size:200%;
+	width:30%;
+	right:100px; 
+	position:absolute;
+	text-align:right;
+}
+
+h4{
+	font-size:200%;
+}
+
+.box{
+	background-color:LavenderBlush;
+	height:500px;
+}
+
+form{
+	text-align:right;
+	padding-right:50px;
+	margin-top:15%;
+}
+
+
