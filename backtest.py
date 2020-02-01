@@ -135,14 +135,9 @@ def get_similar_products_file(
     response = image_annotator_client.product_search(
         image, image_context=image_context)
 
-    index_time = response.product_search_results.index_time
-    # print('Product set index time:')
-    # print('  seconds: {}'.format(index_time.seconds))
-    # print('  nanos: {}\n'.format(index_time.nanos))
-
     results = response.product_search_results.results
-
-    print('Search results:')
+    return results
+    # print('Search results:')
     # for result in results:
     #     product = result.product
     #
@@ -157,8 +152,6 @@ def get_similar_products_file(
 
 
 def delete_all_sets(project_id, location):
-    client = vision.ProductSearchClient()
-
     client = vision.ProductSearchClient()
 
     # A resource that represents Google Cloud Platform location.

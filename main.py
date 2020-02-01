@@ -1,5 +1,6 @@
 from google.cloud import vision
 from flask import Flask, render_template, request, logging, redirect
+
 from google.cloud import storage
 
 import os
@@ -17,45 +18,48 @@ LOCATION = "us-west1"
 PROD_SET_ID = "product-list"
 PROD_CAT = "apparel-v2"
 file_upload = None
-
+UPLOADED = 'processed_pic'
 @app.route('/')
 def home():
     return render_template('index.html')
 
 @app.route('/upload', methods = ['POST'])
 def upload_image():
-    file = request.files['fileToUpload'] # fileToUpload?
+    if request.method == 'POST':
+        file = request.files['fileToUpload']
+        if file:
+            file.save(UPLOADED)
+            return redirect('/process')
+    return render_template('index.html')
 
-    session['file'] = file.filename
-
-    # Create a Cloud Storage client.
-    storage_client = storage.Client()
-
-    # Get the bucket that the file will be uploaded to.
-    bucket = storage_client.get_bucket(CLOUD_STORAGE_BUCKET)
-    blob = bucket.blob(file.filename)
-
-    blob.upload_from_file(file)
-    blob.make_public()
-
-    global file_upload
-    file_upload = blob
+    # session['file'] = file.filename
+    #
+    # # Create a Cloud Storage client.
+    # storage_client = storage.Client()
+    #
+    # # Get the bucket that the file will be uploaded to.
+    # bucket = storage_client.get_bucket(CLOUD_STORAGE_BUCKET)
+    # blob = bucket.blob(file.filename)
+    #
+    # blob.upload_from_file(file)
+    # blob.make_public()
+    #
+    # global file_upload
+    # file_upload = blob
     # Redirect to the home page.
-    return redirect('/process')
+    # return redirect('/process')
 
 
 @app.route('/process')
 def process():
     # filename = PREFIX + session.get('file', None)
 
-    if file_upload:
-        products = bt.get_similar_products_remote(PROJ_ID, LOCATION, PROD_SET_ID, PROD_CAT, file_upload, "")
-        session['products'] = []
-        products.sort(key=lambda x : -x.score)
-        res = products[:3]
-        print(res)
-        return render_template('index.html')
 
+    products = bt.get_similar_products_file(PROJ_ID, LOCATION, PROD_SET_ID, PROD_CAT, UPLOADED, "")
+    session['products'] = []
+    products.sort(key=lambda x : -x.score)
+    res = products[:3]
+    print(res)
     return render_template('index.html')
 
 
