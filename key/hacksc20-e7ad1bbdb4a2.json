@@ -1,0 +1,12 @@
+{
+  "type": "service_account",
+  "project_id": "hack-sc-2020",
+  "private_key_id": "e7ad1bbdb4a27c094f2f5df3eff04904f8b46859",
+  "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvgIBADANBgkqhkiG9w0BAQEFAASCBKgwggSkAgEAAoIBAQC2v2iVoKhXtH1o\ngipuqegWuX1jjMul50HSm8VOXzXSO+utvKzZXxKzUH3VNxG/mhWvvJHedR+zGMIg\nIEdORKiL/sKrpADvNdRf2d06LSlovSL6mVdEAiJrepPxmwHVHK+kQg/V7f3OP/Es\nkuBQjaceo6swbFVP/01TYxn4w41z0ApIAsAUsMdg/t8tMAWpsNP0Iwz8b+F7Mt6Z\ngnB+5+SKxEYlMZYfmcPrAld6jwONwvuega7qcFgSlGwrwjFbPk22qP0+W1weqRhA\no4+0Q+hvyz42UY9Ah+VomokL4ad/uYvR2gV1zN53kE6Y52smzXWwrB9HhV+JTAgx\nmQCBaYKxAgMBAAECggEABVsfRNFgVa+1xDgaZ8NliLL3hJEmD87zDCniEr2yHV8B\ntYYT18wUR3qasYLLa57nt06SxN8QZoaZe+kORfI3sWCuUmr8VwZwGr4PIIsdzVLL\nwWX4m4bnfNhrGRfmqhkM4cbI4Yd32pFfr2N/nQTFyt1XoVPvfSh5mvHK21JZ5TS9\nIloEbMBcUCHi1myNR4ysZpo0mPvCQQKLpme27gFR1fATYViSBzxhNtgeQ1Eb8kQ8\nYMIoAR6P/GsfYe2nmwI9AZUyxqSSQPXxA9C+gI4UY2AZ1Y0ydCcrK3Ev7UwvYoXM\nKTtVpLynlbDMCOmjUnlNoAG8+CFG5Us/AD5ijyK5MQKBgQD7L0QCIUUhHk/ZK87P\nYG4Vg6uVF6tON10qGtlRHJKjHoS4gn3uxTMNKYeKVRKHCgzeAuLc49njzgh3AajH\nFwXhw4O13uiXGGblLHoMw7BXyF/DF74EZqL/d9VNqacfMlLWRg5T+oL6kUvtU+Lq\nV3viy642n2JjiyIPcBsFqePw+QKBgQC6QEavdDttJoBhB0rLLmCji+AIvsS+WHye\nV+TSQGm8Rhu5j+pqb6N2pqVWTTAUxYcub3dmmP0ABAYreEOHCJCEw5H9Dm8EqXgD\n3Op13yOVQhgeb3DJ4T3akEKzTji1dP6onSf5T4hbNPO/gTzZj21Ie3OIYO6AXXDw\nIJH3CmXFeQKBgQDH5S6PL2DvYUsUPkvANzKERpv287YtcdvflSxa441C6RegKqED\nssXU9Lbb/KXY98OTruJR/bY6F44e/yANCKJyr4CS7QlWrWG9ge7DV7xvr5OeE7fx\nkqim+/uxaZEJP6gyw9/FLzirJZQyE68i5Wo+6+8Bo0fOhjwd4w5uLGytKQKBgA02\nTA1cOG74wTig1MxvAMn5PS5BoiFCk6yD3aaQjS+e5Y6XR/C+9KCRF790gEmo7Xr8\ny0KK7b+XiXyB7oBguifA29VQtc1l3C6h+DveVV7cLmvSSfT4NnQPsbuYe+tbXklF\nxLUp0ClwKy5Vk6R3STBQGZT+E00l08Ik/VXB9hA5AoGBAMcE2d/oh8Mmjovh1LEn\nWfRiRvDgAisxKM+TvDTOtP1vv1d5R/Fkad/e5nkD0yNNQowX5rZs/iAOosz1nXOr\nT7JVhFgRUQvLAVc1OsFAJg/WT5qeF9EI0e4yfC/ugy06lNfOQPRr4W5zELN7Dh4u\n2K56Fvlh8Nz6n3oPOo3T35hT\n-----END PRIVATE KEY-----\n",
+  "client_email": "joseph@hack-sc-2020.iam.gserviceaccount.com",
+  "client_id": "116324577882109679716",
+  "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+  "token_uri": "https://oauth2.googleapis.com/token",
+  "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+  "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/joseph%40hack-sc-2020.iam.gserviceaccount.com"
+}
