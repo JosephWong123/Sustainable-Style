@@ -1,40 +1,5 @@
-#!/usr/bin/env python
-
-# Copyright 2018 Google Inc. All Rights Reserved.
-#
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#    http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the License.
-
-"""This application demonstrates how to perform operations
-on Product set in Cloud Vision Product Search.
-For more information, see the tutorial page at
-https://cloud.google.com/vision/product-search/docs/
-"""
-
-import argparse
-
-# [START vision_product_search_delete_product_set]
-# [START vision_product_search_list_product_sets]
-# [START vision_product_search_get_product_set]
-# [START vision_product_search_create_product_set]
 from google.cloud import vision
 
-# [END vision_product_search_delete_product_set]
-# [END vision_product_search_list_product_sets]
-# [END vision_product_search_get_product_set]
-# [END vision_product_search_create_product_set]
-
-
-# [START vision_product_search_create_product_set]
 def create_product_set(
         project_id, location, product_set_id, product_set_display_name):
     """Create a product set.
@@ -62,15 +27,14 @@ def create_product_set(
 
     # Display the product set information.
     print('Product set name: {}'.format(response.name))
-# [END vision_product_search_create_product_set]
 
-
-# [START vision_product_search_list_product_sets]
-def list_product_sets(project_id, location):
-    """List all product sets.
+def import_product_sets(project_id, location, gcs_uri):
+    """Import images of different products in the product set.
     Args:
         project_id: Id of the project.
         location: A compute region name.
+        gcs_uri: Google Cloud Storage URI.
+            Target files must be in Product Search CSV format.
     """
     client = vision.ProductSearchClient()
 
@@ -78,109 +42,32 @@ def list_product_sets(project_id, location):
     location_path = client.location_path(
         project=project_id, location=location)
 
-    # List all the product sets available in the region.
-    product_sets = client.list_product_sets(parent=location_path)
+    # Set the input configuration along with Google Cloud Storage URI
+    gcs_source = vision.types.ImportProductSetsGcsSource(
+        csv_file_uri=gcs_uri)
+    input_config = vision.types.ImportProductSetsInputConfig(
+        gcs_source=gcs_source)
 
-    # Display the product set information.
-    for product_set in product_sets:
-        print('Product set name: {}'.format(product_set.name))
-        print('Product set id: {}'.format(product_set.name.split('/')[-1]))
-        print('Product set display name: {}'.format(product_set.display_name))
-        print('Product set index time:')
-        print('  seconds: {}'.format(product_set.index_time.seconds))
-        print('  nanos: {}\n'.format(product_set.index_time.nanos))
-# [END vision_product_search_list_product_sets]
+    # Import the product sets from the input URI.
+    response = client.import_product_sets(
+        parent=location_path, input_config=input_config)
 
+    print('Processing operation name: {}'.format(response.operation.name))
+    # synchronous check of operation status
+    result = response.result()
+    print('Processing done.')
 
-# [START vision_product_search_get_product_set]
-def get_product_set(project_id, location, product_set_id):
-    """Get info about the product set.
-    Args:
-        project_id: Id of the project.
-        location: A compute region name.
-        product_set_id: Id of the product set.
-    """
-    client = vision.ProductSearchClient()
-
-    # Get the full path of the product set.
-    product_set_path = client.product_set_path(
-        project=project_id, location=location,
-        product_set=product_set_id)
-
-    # Get complete detail of the product set.
-    product_set = client.get_product_set(name=product_set_path)
-
-    # Display the product set information.
-    print('Product set name: {}'.format(product_set.name))
-    print('Product set id: {}'.format(product_set.name.split('/')[-1]))
-    print('Product set display name: {}'.format(product_set.display_name))
-    print('Product set index time:')
-    print('  seconds: {}'.format(product_set.index_time.seconds))
-    print('  nanos: {}'.format(product_set.index_time.nanos))
-# [END vision_product_search_get_product_set]
-
-
-# [START vision_product_search_delete_product_set]
-def delete_product_set(project_id, location, product_set_id):
-    """Delete a product set.
-    Args:
-        project_id: Id of the project.
-        location: A compute region name.
-        product_set_id: Id of the product set.
-    """
-    client = vision.ProductSearchClient()
-
-    # Get the full path of the product set.
-    product_set_path = client.product_set_path(
-        project=project_id, location=location,
-        product_set=product_set_id)
-
-    # Delete the product set.
-    client.delete_product_set(name=product_set_path)
-    print('Product set deleted.')
-# [END vision_product_search_delete_product_set]
-
+    for i, status in enumerate(result.statuses):
+        print('Status of processing line {} of the csv: {}'.format(
+            i, status))
+        # Check the status of reference image
+        # `0` is the code for OK in google.rpc.Code.
+        if status.code == 0:
+            reference_image = result.reference_images[i]
+            print(reference_image)
+        else:
+            print('Status code not OK: {}'.format(status.message))
 
 if __name__ == '__main__':
-    parser = argparse.ArgumentParser(
-        description=__doc__,
-        formatter_class=argparse.RawDescriptionHelpFormatter)
-    subparsers = parser.add_subparsers(dest='command')
-    parser.add_argument(
-        '--project_id',
-        help='Project id.  Required',
-        required=True)
-    parser.add_argument(
-        '--location',
-        help='Compute region name',
-        default='us-west1')
-
-    create_product_set_parser = subparsers.add_parser(
-        'create_product_set', help=create_product_set.__doc__)
-    create_product_set_parser.add_argument('product_set_id')
-    create_product_set_parser.add_argument('product_set_display_name')
-
-    list_product_sets_parser = subparsers.add_parser(
-        'list_product_sets', help=list_product_sets.__doc__)
-
-    get_product_set_parser = subparsers.add_parser(
-        'get_product_set', help=get_product_set.__doc__)
-    get_product_set_parser.add_argument('product_set_id')
-
-    delete_product_set_parser = subparsers.add_parser(
-        'delete_product_set', help=delete_product_set.__doc__)
-    delete_product_set_parser.add_argument('product_set_id')
-
-    args = parser.parse_args()
-
-    if args.command == 'create_product_set':
-        create_product_set(
-            args.project_id, args.location, args.product_set_id,
-            args.product_set_display_name)
-    elif args.command == 'list_product_sets':
-        list_product_sets(args.project_id, args.location)
-    elif args.command == 'get_product_set':
-        get_product_set(args.project_id, args.location, args.product_set_id)
-    elif args.command == 'delete_product_set':
-        delete_product_set(
-            args.project_id, args.location, args.product_set_id)
+    create_product_set("hack-sc-2020", "us-west1", "second_test_set", "test")
+    import_product_sets("hack-sc-2020", "us-west1", "gs://test-fashion-data/ProductDes.csv")
