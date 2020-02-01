@@ -226,5 +226,5 @@ if __name__ == '__main__':
     # import_product_sets("hack-sc-2020", "us-west1", "gs://test-fashion-data/ProductDesFinal.csv")
     # list_product_sets("hack-sc-2020", "us-west1")
     # get_product_set("hack-sc-2020", "us-west1", "product-list")
-    get_similar_products_file('hack-sc-2020', 'us-west1', "product-list", "apparel-v2", "test_file2.png", "")
+    get_similar_products_file('hack-sc-2020', 'us-west1', "product-list", "apparel-v2", "TestFiles/hmgoepprod.jpeg", "")
     # delete_all_sets("hack-sc-2020", "us-west1")
