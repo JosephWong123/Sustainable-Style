@@ -1,0 +1,27 @@
+*{
+	margin:0;
+	padding:0;
+}
+
+html{
+	background-image:linear-gradient(thistle, lightslategrey);
+	height:100%;
+}
+
+h4{
+	color:black;
+	font-style:italic;
+	font-family:Courier;
+	font-size:300%;
+	text-align:center;
+	padding-top:30px;
+}
+
+.elements {
+	width:30%;
+	height:30%;
+}
+
+
+
+
