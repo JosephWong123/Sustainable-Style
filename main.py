@@ -1,9 +1,8 @@
-from google.cloud import vision
 from flask import Flask, render_template, request, logging, redirect
 
 from google.cloud import storage
+from google.protobuf.json_format import MessageToDict
 
-import os
 import backtest as bt
 
 CLOUD_STORAGE_BUCKET = 'uploaded-images-2020'
@@ -32,23 +31,6 @@ def upload_image():
             return redirect('/process')
     return render_template('index.html')
 
-    # session['file'] = file.filename
-    #
-    # # Create a Cloud Storage client.
-    # storage_client = storage.Client()
-    #
-    # # Get the bucket that the file will be uploaded to.
-    # bucket = storage_client.get_bucket(CLOUD_STORAGE_BUCKET)
-    # blob = bucket.blob(file.filename)
-    #
-    # blob.upload_from_file(file)
-    # blob.make_public()
-    #
-    # global file_upload
-    # file_upload = blob
-    # Redirect to the home page.
-    # return redirect('/process')
-
 
 @app.route('/process')
 def process():
@@ -56,10 +38,13 @@ def process():
 
 
     products = bt.get_similar_products_file(PROJ_ID, LOCATION, PROD_SET_ID, PROD_CAT, UPLOADED, "")
-    session['products'] = []
     products.sort(key=lambda x : -x.score)
     res = products[:3]
-    print(res)
+    links = []
+    for proto in res:
+        temp = MessageToDict(proto.product.product_labels, preserving_proto_field_name=True)
+        links.append(temp[' link'])
+
     return render_template('index.html')
 
 

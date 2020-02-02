@@ -5,7 +5,7 @@
 	<link rel="stylesheet" type="text/css" href="../static/style.css">
 </head>
 <body>
-	
+
 	<div class="top">
 		<header id="main-header">
 			<h1>SUSTAINABLE STYLE</h1>
@@ -25,17 +25,11 @@
 		</div>
 	</div>
 
-	<form onsubmit="submit()"id="form" action="upload" method="POST" enctype="multipart/form-data">
+	<form id="form" action="upload" method="POST" enctype="multipart/form-data">
 		SELECT IMAGE TO UPLOAD
 		<input type="file" name="fileToUpload" id="fileToUpload">
 		<input type="submit" value="Submit" name="submit">
-
 	</form>
-	<script>
-		function submit() {
-
-		}
-	</script>
 
 	<br>
 	<hr>
@@ -47,9 +41,9 @@
 		<table>
 			<tbody>
 				<tr>
-					<th><img id="one" class="placeholder" src="../static/blank.jpg"></th>
-					<th><img id="two" class="placeholder" src="../static/blank.jpg"></th>
-					<th><img id="three" class="placeholder" src="../static/blank.jpg"></th>
+					<th><img id="one" class="placeholder" src="{{ image1 }}" href="{{ link1 }}"></th>
+					<th><img id="two" class="placeholder" src="{{ image2 }}" href="{{ link2 }}"></th>
+					<th><img id="three" class="placeholder" src="{{ image3 }}" href="{{ link3 }}"></th>
 				</tr>
 			</tbody>
 		</table>
