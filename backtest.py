@@ -2,7 +2,7 @@ from google.cloud import vision, storage
 import os
 import cloudstorage as gcs
 
-from main import CLOUD_STORAGE_BUCKET
+# from main import CLOUD_STORAGE_BUCKET
 
 os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = "key/creds.json"
 
@@ -136,19 +136,9 @@ def get_similar_products_file(
         image, image_context=image_context)
 
     results = response.product_search_results.results
+
     return results
-    # print('Search results:')
-    # for result in results:
-    #     product = result.product
-    #
-    #     print('Score(Confidence): {}'.format(result.score))
-    #     print('Image name: {}'.format(result.image))
-    #
-    #     print('Product name: {}'.format(product.name))
-    #     print('Product display name: {}'.format(
-    #         product.display_name))
-    #     print('Product description: {}\n'.format(product.description))
-    #     print('Product labels: {}\n'.format(product.product_labels))
+
 
 
 def delete_all_sets(project_id, location):
@@ -164,69 +154,9 @@ def delete_all_sets(project_id, location):
     for product_set in product_sets:
         delete_product_set(project_id, location, product_set.name.split('/')[-1])
 
-def get_similar_products_remote(
-        project_id, location, product_set_id, product_category,
-        blob_name, filter):
-    """Search similar products to image.
-    Args:
-        project_id: Id of the project.
-        location: A compute region name.
-        product_set_id: Id of the product set.
-        product_category: Category of the product.
-        uri: GCS uri to file
-        filter: Condition to be applied on the labels.
-        Example for filter: (color = red OR color = blue) AND style = kids
-        It will search on all products with the following labels:
-        color:red AND style:kids
-        color:blue AND style:kids
-    """
-    # product_search_client is needed only for its helper methods.
-    product_search_client = vision.ProductSearchClient()
-    image_annotator_client = vision.ImageAnnotatorClient()
-
-    DESTINATION = 'downloaded_file.png'
-    # Read the image as a stream of bytes.
-    storage_client = storage.Client()
-    bucket = storage_client.bucket(CLOUD_STORAGE_BUCKET)
-    blob = bucket.blob(blob_name)
-    blob.download_to_filename(DESTINATION)
-
-    with open(DESTINATION, 'rb') as image_file:
-        content = image_file.read()
-
-    # Create annotate image request along with product search feature.
-    image = vision.types.Image(content=content)
-
-    # product search specific parameters
-    product_set_path = product_search_client.product_set_path(
-        project=project_id, location=location,
-        product_set=product_set_id)
-    product_search_params = vision.types.ProductSearchParams(
-        product_set=product_set_path,
-        product_categories=[product_category],
-        filter=filter)
-    image_context = vision.types.ImageContext(
-        product_search_params=product_search_params)
-
-    # Search products similar to the image.
-    response = image_annotator_client.product_search(
-        image, image_context=image_context)
-
-    results = response.product_search_results.results
-
-    return results
-    # for result in results:
-    #     product = result.product
-    #
-    #     print('Score(Confidence): {}'.format(result.score))
-    #     print('Image name: {}'.format(result.image))
-    #
-    #     print('Product name: {}'.format(product.name))
-    #     print('Product display name: {}'.format(
-    #         product.display_name))
-    #     print('Product description: {}\n'.format(product.description))
-    #     print('Product labels: {}\n'.format(product.product_labels))
 
 if __name__ == '__main__':
-    pass
-    # get_similar_products_file('hack-sc-2020', 'us-west1', "product-list", "apparel-v2", "TestFiles/hmgoepprod.jpeg", "")
+    delete_all_sets("hack-sc-2020", "us-west1")
+    import_product_sets("hack-sc-2020", "us-west1", "gs://test-fashion-data/ProductDes.csv")
+
+

@@ -39,13 +39,11 @@ def process():
 
     products = bt.get_similar_products_file(PROJ_ID, LOCATION, PROD_SET_ID, PROD_CAT, UPLOADED, "")
     products.sort(key=lambda x : -x.score)
-    res = products[:3]
-    links = []
-    for proto in res:
-        temp = MessageToDict(proto.product.product_labels, preserving_proto_field_name=True)
-        links.append(temp[' link'])
-
-    return render_template('index.html')
+    res = products[0:3]
+    for x in range(3):
+        res[x].product.name = res[x].product.name[res[x].product.name.rfind('/')+1:]
+    print(res[0].product.name)
+    return render_template('output.html', product_list=res)
 
 
 @app.errorhandler(500)

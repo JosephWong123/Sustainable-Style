@@ -1,5 +1,6 @@
 *{
 	margin:0;
+	padding:0;
 }
 .top{
 	background-color:white;
@@ -49,14 +50,14 @@ h4{
 form{
 	text-align:right;
 	padding-right:50px;
-	margin-top:1%;
+	margin-top:10px;
 }
 
 .fashion_image{
-	padding-left:9%;
+	padding-left:5%;
 }
 
-.placeholder {
-	width: 30%;
-	padding-top: 100%;
+.elements {
+	width: 20%;
+	height: 20%;
 }
