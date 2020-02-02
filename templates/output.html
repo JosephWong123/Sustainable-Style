@@ -15,16 +15,16 @@
                 <td>
                 {% for res in product_list %}
                     <a href="{{res.product.product_labels[2].value}}">
-                        {% if res.product.product_labels[3].value == "H&M-Conscious" %}
+                        {% if res.product.product_labels[3] and res.product.product_labels[3].value == "H&M-Conscious" %}
                             {% set img_url = "https://storage.googleapis.com/hacksc2020_product/" + "HM-" + res.product.name + ".jpeg" %}
                             <img class="elements" src="{{img_url}}">
                         {% endif %}
 
-                        {% if res.product.product_labels[3].value == "Reformation" %}
+                        {% if res.product.product_labels[3] and res.product.product_labels[3].value == "Reformation" %}
                             {% set img_url = "https://storage.googleapis.com/hacksc2020_product/" + "REF-" + res.product.name + ".jpg" %}
                             <img class="elements" src="{{img_url}}">
                         {% endif %}
-                        {% if res.product.product_labels[3].value == "Vinted" %}
+                        {% if res.product.product_labels[3] and res.product.product_labels[3].value == "Vinted" %}
                             {% set img_url = "https://storage.googleapis.com/hacksc2020_product/" + "V-" + res.product.name + ".jpeg" %}
                             <img class="elements" src="{{img_url}}">
                         {% endif %}
