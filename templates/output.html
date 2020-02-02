@@ -16,6 +16,7 @@
             <tr>
                 <td>
                 {% for res in product_list %}
+                    {% if res.product.product_labels[3] %}
                     <a href="{{res.product.product_labels[2].value}}">
                         {% if res.product.product_labels[3] and res.product.product_labels[3].value == "H&M-Conscious" %}
                             {% set img_url = "https://storage.googleapis.com/hacksc2020_product/" + "HM-" + res.product.name + ".jpeg" %}
@@ -30,6 +31,7 @@
                             {% set img_url = "https://storage.googleapis.com/hacksc2020_product/" + "V-" + res.product.name + ".jpeg" %}
                             <img class="elements" src="{{img_url}}">
                         {% endif %}
+                    {% endif %}
                     </a>
                 {% endfor %}
                 </td>
